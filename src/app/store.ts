@@ -5,7 +5,7 @@ import todoReducer from '../features/todo/todoSlice';
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
-    todo: todoReducer,
+    todos: todoReducer,
   },
 });
 

@@ -2,29 +2,35 @@ import React, { useEffect, useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
+  fetchTodoAsync,
   addTodoAsync,
-  fetchTodoAsync
+  updateTodoAsync,
+  deleteTodoAsync,
+  TodoState
 } from './todoSlice';
 import styles from './Todo.module.css';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 export function Todo() {
   const dispatch = useAppDispatch();
-  const todoState = useAppSelector((state) => state.todo);
+  const todoState = useAppSelector((state) => state.todos);
   const [taskName, setTaskName] = useState('');
 
   useEffect(() => {
     dispatch(fetchTodoAsync());
   }, [dispatch]);
 
-  const handleCheckboxClick = () => {
-    console.log("checkbox clicked...")
-    //dispatch(toggleCompleteAsync({ id, completed: !completed }));
+  const handleCheckboxClick = (todo: TodoState) => {
+    let updatedTodo: TodoState = {
+      id: todo.id,
+      name: todo.name,
+      isComplete: !todo.isComplete,
+    }
+    dispatch(updateTodoAsync(updatedTodo));
   };
 
-  const handleDeleteClick = () => {
-    console.log("delete clicked...")
-    // dispatch(deleteTodoAsync({ id }));
+  const handleDeleteClick = (id: string) => {
+    dispatch(deleteTodoAsync(id));
   };
 
   return (
@@ -38,13 +44,15 @@ export function Todo() {
                   type='checkbox'
                   className='mr-3'
                   checked={todo.isComplete}
-                  onClick={handleCheckboxClick}
+                  onClick={() => handleCheckboxClick(todo)}
                 ></input>
                 {todo.name}
               </div>
               <div className={styles.separator}></div>
               <div>
-                <button onClick={handleDeleteClick} className={styles.button}>
+                <button
+                  className={styles.button}
+                  onClick={() => handleDeleteClick(todo.id)}>
                   Delete
                 </button>
               </div>
