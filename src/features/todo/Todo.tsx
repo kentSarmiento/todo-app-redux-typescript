@@ -9,7 +9,6 @@ import {
   TodoState
 } from './todoSlice';
 import styles from './Todo.module.css';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 export function Todo() {
   const dispatch = useAppDispatch();
